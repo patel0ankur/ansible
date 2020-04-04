@@ -1,0 +1,13 @@
+#To get the response after runnnig the command. We use register to store the response as a variable. 
+# Stats module to verify if the file existed or not.
+
+--- 
+- hosts: localhost 
+  gather_facts: no 
+  tasks:
+  - stat:
+      path: /project/file.txt
+    register: result
+ 
+  - commannd: cp /project/file.txt /project/file.backup
+    when: result.stat.exists

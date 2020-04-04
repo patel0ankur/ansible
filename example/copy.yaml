@@ -1,0 +1,24 @@
+---
+- hosts: all
+  name: Copy files
+  become_user: root
+
+  tasks:
+    - name: make dir
+      file:
+          path: /tmp/pythonfile/
+          state: directory 
+          #mode: "u=rwx,g=rwx,o=rx"
+          mode: 0775
+
+    - name: Copying files
+      copy:
+        dest: /tmp/pythonfile/
+        src: /home/vagrant/flaskapp.py
+
+    - name: Moving files
+      command: mv /home/vagrant/flaskapp.py /tmp/pythonfile/
+
+
+
+    

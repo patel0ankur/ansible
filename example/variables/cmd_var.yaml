@@ -1,0 +1,13 @@
+---
+
+- hosts: web
+  name: Command Line variable
+  tasks:
+  - debug: 
+     msg: "The value of var1={{value1}} and var2={{value2}}"
+
+
+# Command to run: 
+#ansible-playbook -i ../../inventory cmd_var.yaml -e "value1=tiger value2=king"
+
+

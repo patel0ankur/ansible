@@ -1,0 +1,15 @@
+---
+
+- name: Add Workers to the Swarm
+  #vars:
+  #  token: "{{ hostvars[groups['docker_manager'][0]]['worker_token']['stdout'] }}"
+  #debug: var=hostvars[inventory_hostname]['ansible_enp0s8']['ipv4']['address']
+  #debug: var=hostvars[inventory_hostname]['groups']['docker_manager'][0]
+  command: "docker swarm join --token {{ hostvars[groups['docker_manager'][0]]['worker_token']['stdout'] }} {{ hostvars[inventory_hostname]['groups']['docker_manager'][0] }}:2377"
+  register: worker
+
+- name: Show Results
+  debug: var=worker.stdout
+
+- name: Show Errors
+  debug: var=worker.stderr

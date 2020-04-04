@@ -1,0 +1,46 @@
+Sequence (key):
+
+key1:
+ - value1
+ - value2
+ - value3
+
+ Map (Dictionary): 
+
+ Key:
+   key1: value1
+   key2: value2
+   key3: value3
+
+Sequence of Map: 
+- Key:
+   key1: value1
+   key2:
+    - value1
+    - value2
+    - value3
+   key3: value3
+   key4: value4
+
+################## Sample Playbook #################
+---
+# Play 1
+- hosts: all
+  name: 
+  become_user: root
+
+  tasks:
+    - name: Task1
+      <module>: 
+
+    - name: Task2
+      <module>: 
+
+# Play 2
+- hosts: app_server
+  name:
+  become_user: root
+
+  tasks:
+    - name: Task1
+      <module>:

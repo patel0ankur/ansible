@@ -1,0 +1,17 @@
+---
+- hosts: web
+  name: Iteration or looping example
+  become_user: root
+
+  tasks:
+    - name: make dir
+      file:
+          path: /tmp/{{ item }}
+          state: directory 
+      with_items:
+      - pythonfile1
+      - pythonfile2
+      - pythonfile3
+
+
+

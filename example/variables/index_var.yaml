@@ -1,0 +1,22 @@
+--- 
+- hosts: web
+  name: Retrieves and Displays indices
+  vars:
+   - continents:
+      - Africa
+      - Asia
+      - South America
+      - North America
+      - Europe
+  
+  tasks:
+    - name: List variables
+      debug:
+          msg: "Continents Name: {{continents [1]}}"
+          verbosity: 0
+  
+    - name: array variables 
+      debug: 
+          msg: "{{ item }}"
+      with_items:
+       - "{{ continents }}"

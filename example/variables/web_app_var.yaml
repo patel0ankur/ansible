@@ -1,0 +1,17 @@
+---
+  - hosts: web
+    name: webapp
+    become_user: root
+
+    vars: 
+      mycontent: "This is the file"
+
+    tasks:
+      - name: update file 
+        copy:
+          dest: /tmp/var.txt
+          content: "{{mycontent}}"
+          
+
+        
+      

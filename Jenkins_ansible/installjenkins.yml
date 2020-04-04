@@ -1,0 +1,59 @@
+---
+-
+  hosts: all
+  name: "Gather Facts"
+  become_user: root
+
+  tasks:
+    - name: Install Dependencies
+      yum:
+        name:
+          - wget
+          - java-1.8.0-openjdk
+          - curl
+
+    - name: Download Jenkins Repo
+      get_url:
+        url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+
+    - name: Import Jenkins key
+      rpm_key:
+        key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
+        state: present
+
+    - name: Ensure Jenkins Repository is Installed
+      yum_repository:
+        name: jenkins
+        state: present
+        description: Official Jenkins Yum Repo
+        baseurl: http://pkg.jenkins.io/redhat
+        gpgkey: https://jenkins-ci.org/redhat/jenkins-ci.org.key
+        gpgcheck: yes
+        enabled: yes
+
+    - name: Install Jenkins
+      yum:
+        name: jenkins
+        state: present
+
+    - name: Ensure Jenkins is Installed
+      yum :
+        name: jenkins
+        update_cache: yes
+        state: present
+
+    - name: Start & Enable Jenkins
+      systemd:
+        name: jenkins
+        state: started
+        enabled: true
+
+    - name: Get Jenkins Password
+      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      changed_when: false
+      register: result
+
+    - name: Print Jenkins Password
+      debug:
+        var: result.stdout

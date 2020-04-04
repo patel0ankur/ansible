@@ -1,0 +1,57 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+    - name: Disable swap
+      command: swapoff -a
+      when: ansible_swaptotal_mb > 0
+
+    - name: Put SELinux in permissive mode.
+      selinux:
+        policy: targeted
+        state: permissive
+
+    - name: Commenting Swap entries in /etc/fstab
+      replace:
+        path: /etc/fstab
+        regexp: '(.*swap*)'
+        replace: '#\1'
+
+    - name: Enabling Bridge Firewall Rule
+      shell: "echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables"
+
+    - name: Creating a repository file for Kubernetes
+      file:
+        path: /etc/yum.repos.d/kubernetes.repo
+        state: touch
+
+    - name: Adding repository details in Kubernetes repo file.
+      blockinfile:
+        path: /etc/yum.repos.d/kubernetes.repo
+        block: |
+          [kubernetes]
+          name=Kubernetes
+          baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+          enabled=1
+          gpgcheck=1
+          repo_gpgcheck=1
+          gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+    - name: Install Kubernetes binaries
+      yum:
+        name: "{{ packages }}"
+        state: present
+        update_cache: yes
+      vars:
+       packages:
+         - kubelet
+         - kubeadm
+         - kubectl
+
+    - name: Start & Enable kubelet
+      systemd:
+        name: kubelet
+        daemon_reload: yes
+        state: started
+        enabled: true

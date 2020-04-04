@@ -1,0 +1,46 @@
+---
+- name: Install Docker Dependencies
+  yum:
+    name:
+      - yum-utils
+      - ca-certificates
+      - device-mapper-persistent-data
+      - lvm2
+    state: present
+    update_cache: yes
+
+- name: Add Docker Repo
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker.repo
+  become: yes
+
+- name: Ensure Docker Repository is Installed
+  yum_repository:
+    name: docker
+    state: present
+    description: Official Docker Yum Repo
+    baseurl: https://download.docker.com/linux/centos
+    gpgcheck: no
+    enabled: yes
+
+- name: Install Docker
+  yum:
+    name: docker
+    disablerepo: docker
+    disable_gpg_check: yes
+    validate_certs: no
+    state: latest
+    update_cache: yes
+
+- name: Ensure Docker is Installed
+  yum :
+    name: docker
+    update_cache: yes
+    state: present
+
+- name: Start & Enable Docker
+  systemd:
+    name: docker
+    state: started
+    enabled: true

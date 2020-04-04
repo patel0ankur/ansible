@@ -1,0 +1,12 @@
+---
+- hosts: web
+  name: Print debug message
+  vars_prompt:
+    name: "Version"
+    promt: "Which version Do you want to install: "
+  
+  tasks:
+    - name: Ansible prompt example.
+      debug:
+          msg: "Version you are installing: {{Version}}"
+          verbosity: 0

@@ -1,0 +1,20 @@
+---
+- name: setup pre-requisites
+  hosts: all
+  roles:
+    - install-modules
+
+- name: install docker
+  hosts: docker_nodes
+  roles:
+    - docker-installation
+
+- name: initialize docker swarm
+  hosts: docker_manager
+  roles:
+    - docker-swarm-init
+
+- name: add workers to the swarm
+  hosts: docker_slave
+  roles:
+    - docker-swarm-add-worker

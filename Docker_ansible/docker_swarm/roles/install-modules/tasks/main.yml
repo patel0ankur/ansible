@@ -1,0 +1,8 @@
+---
+- name: Install Packages
+  yum:
+    name:
+      - wget
+      - curl
+    state: present
+    update_cache: yes

@@ -1,0 +1,8 @@
+# list has to start with '-'
+
+
+Commands:
+
+ansible localhost -m command -a "cat /tmp/var.txt"
+ansible-playbook sample.yaml -e "var1=value var2=value"
+

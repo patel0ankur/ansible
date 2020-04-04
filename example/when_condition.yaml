@@ -1,0 +1,10 @@
+---
+  - hosts: web
+    name: When expression
+    tasks:
+      - name: Write info in file 
+        copy:
+          dest: /tmp/file.txt
+          content: "The is hello world"
+        when: true
+
